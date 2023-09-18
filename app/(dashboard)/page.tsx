@@ -7,6 +7,7 @@ import prisma from "@/lib/prisma";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import SadFace from "@/components/icons/SadFace";
 import CreateCollectionBtn from "@/components/CreateCollectionBtn";
+import CollectionCard from "@/components/CollectionCard";
 
 export default async function Home() {
   return (
@@ -44,7 +45,7 @@ function WelcomeMsgFallback() {
   return (
     <div className="flex w-full mb-12">
       <h1 className="text-4xl font-bold">
-        <Skeleton className="w-[150px] h-[36px]" />
+        <Skeleton className="w-[150px] h-[36px] mb-2" />
         <Skeleton className="w-[150px] h-[36px]" />
       </h1>
     </div>
@@ -71,4 +72,15 @@ async function CollectionList() {
       </div>
     );
   }
+
+  return (
+    <>
+      <CreateCollectionBtn />
+      <div className="flex flex-col gap-4 mt-6">
+        {collections.map((collection) => (
+          <CollectionCard key={collection.id} collection={collection} />
+        ))}
+      </div>
+    </>
+  );
 }
