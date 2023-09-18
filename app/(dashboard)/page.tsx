@@ -34,8 +34,7 @@ async function WelcomeMsg() {
   return (
     <div className="flex w-full mb-12">
       <h1 className="text-4xl font-bold">
-        Welcome, <br />
-        <div className="capitalize">{user?.lastName}</div>
+        <div className="capitalize">Welcome {user?.firstName}!</div>
       </h1>
     </div>
   );
