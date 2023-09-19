@@ -8,6 +8,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import SadFace from "@/components/icons/SadFace";
 import CreateCollectionBtn from "@/components/CreateCollectionBtn";
 import CollectionCard from "@/components/CollectionCard";
+import { createCollection, deleteCollection } from "@/actions/collection";
 
 export default async function Home() {
   return (
@@ -70,17 +71,21 @@ async function CollectionList() {
           <AlertTitle>No connections yet</AlertTitle>
           <AlertDescription>Create a collection to get started</AlertDescription>
         </Alert>
-        <CreateCollectionBtn />
+        <CreateCollectionBtn createCollection={createCollection} />
       </div>
     );
   }
 
   return (
     <>
-      <CreateCollectionBtn />
+      <CreateCollectionBtn createCollection={createCollection} />
       <div className="flex flex-col gap-4 mt-6">
         {collections.map((collection) => (
-          <CollectionCard key={collection.id} collection={collection} />
+          <CollectionCard
+            key={collection.id}
+            collection={collection}
+            deleteCollection={deleteCollection}
+          />
         ))}
       </div>
     </>

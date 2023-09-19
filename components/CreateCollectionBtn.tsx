@@ -4,7 +4,14 @@ import React, { useState } from "react";
 import { Button } from "./ui/button";
 import CreateCollectionSheet from "./CreateCollectionSheet";
 
-const CreateCollectionBtn = () => {
+type Props = {
+  createCollection: (form: {
+    name: string;
+    color: string;
+  }) => Promise<{ id: number; name: string; userId: string; color: string; createdAt: Date }>;
+};
+
+const CreateCollectionBtn = ({ createCollection }: Props) => {
   const [open, setOpen] = useState(false);
 
   const handleOpenChange = (open: boolean) => {
@@ -21,7 +28,11 @@ const CreateCollectionBtn = () => {
           Create collection
         </span>
       </Button>
-      <CreateCollectionSheet open={open} onOpenChange={handleOpenChange} />
+      <CreateCollectionSheet
+        open={open}
+        onOpenChange={handleOpenChange}
+        createCollection={createCollection}
+      />
     </div>
   );
 };

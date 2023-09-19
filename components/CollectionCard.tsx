@@ -21,7 +21,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "./ui/alert-dialog";
-import { deleteCollection } from "@/actions/collection";
 import { toast } from "./ui/use-toast";
 import CreateTaskDialog from "./CreateTaskDialog";
 import TaskCard from "./TaskCard";
@@ -30,9 +29,12 @@ interface Props {
   collection: Collection & {
     tasks: Task[];
   };
+  deleteCollection: (
+    id: number
+  ) => Promise<{ id: number; name: string; userId: string; color: string; createdAt: Date }>;
 }
 
-function CollectionCard({ collection }: Props) {
+function CollectionCard({ collection, deleteCollection }: Props) {
   const [isOpen, setIsOpen] = useState(true);
   const router = useRouter();
 

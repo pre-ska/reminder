@@ -1,7 +1,8 @@
-import React from "react";
+import { useRouter } from "next/navigation";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "./ui/sheet";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ReloadIcon } from "@radix-ui/react-icons";
 
 import { createCollectionSchema, createCollectionSchemaType } from "@/schema/createCollection";
 import {
@@ -19,19 +20,18 @@ import { CollectionColor, CollectionColors } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { Separator } from "./ui/separator";
 import { Button } from "./ui/button";
-import { ReloadIcon } from "@radix-ui/react-icons";
-import { createCollection } from "@/actions/collection";
-import { useRouter } from "next/navigation";
-import { log } from "console";
-import { Toast } from "./ui/toast";
 import { toast } from "./ui/use-toast";
 
 interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  createCollection: (form: {
+    name: string;
+    color: string;
+  }) => Promise<{ id: number; name: string; userId: string; color: string; createdAt: Date }>;
 }
 
-function CreateCollectionSheet({ open, onOpenChange }: Props) {
+function CreateCollectionSheet({ open, onOpenChange, createCollection }: Props) {
   const form = useForm<createCollectionSchemaType>({
     resolver: zodResolver(createCollectionSchema),
     defaultValues: {
