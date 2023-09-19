@@ -1,6 +1,6 @@
 "use client";
-import { Collection } from "@prisma/client";
-import React, { useState, useTransition } from "react";
+import { Collection, Task } from "@prisma/client";
+import React, { useMemo, useState, useTransition } from "react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./ui/collapsible";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
@@ -23,16 +23,20 @@ import {
 } from "./ui/alert-dialog";
 import { deleteCollection } from "@/actions/collection";
 import { toast } from "./ui/use-toast";
+import CreateTaskDialog from "./CreateTaskDialog";
+import TaskCard from "./TaskCard";
 
 interface Props {
   collection: Collection & {
-    tasks: {}[];
+    tasks: Task[];
   };
 }
 
 function CollectionCard({ collection }: Props) {
   const [isOpen, setIsOpen] = useState(true);
   const router = useRouter();
+
+  const tasks = collection.tasks;
 
   const [showCreateModal, setShowCreateModal] = useState(false);
 
@@ -57,14 +61,24 @@ function CollectionCard({ collection }: Props) {
     }
   };
 
+  const tasksDone = useMemo(() => {
+    return collection.tasks.filter((task) => task.done).length;
+  }, [collection.tasks]);
+
+  const totalTasks = collection.tasks.length;
+
+  const progress = totalTasks === 0 ? 0 : (tasksDone / totalTasks) * 100;
+
   const isPowder = collection.color === "powder";
-
-  const tasks = [1, 2];
-
-  const progress = 20;
 
   return (
     <>
+      <CreateTaskDialog
+        open={showCreateModal}
+        setOpen={setShowCreateModal}
+        collection={collection}
+      />
+
       <Collapsible open={isOpen} onOpenChange={setIsOpen}>
         <CollapsibleTrigger asChild>
           <Button
@@ -88,7 +102,7 @@ function CollectionCard({ collection }: Props) {
             <Button
               variant={"ghost"}
               className="flex items-center justify-center gap-1 p-8 py-12 rounded-none"
-              // onClick={() => setShowCreateModal(true)}
+              onClick={() => setShowCreateModal(true)}
             >
               <p>There are no tasks yet:</p>
               <span
@@ -105,7 +119,11 @@ function CollectionCard({ collection }: Props) {
           {tasks.length > 0 && (
             <>
               <Progress className="rounded-none" value={progress} />
-              <div className="p-4 gap-3 flex flex-col">{tasks.map((task) => "aaaa")}</div>
+              <div className="p-4 gap-3 flex flex-col">
+                {tasks.map((task) => (
+                  <TaskCard key={task.id} task={task} />
+                ))}
+              </div>
             </>
           )}
 

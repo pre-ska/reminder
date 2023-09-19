@@ -43,7 +43,7 @@ async function WelcomeMsg() {
 function WelcomeMsgFallback() {
   return (
     <div className="flex w-full mb-12">
-      <h1 className="text-4xl font-bold">
+      <h1 className="text-4xl font-bold flex gap-3">
         <Skeleton className="w-[150px] h-[36px] mb-2" />
         <Skeleton className="w-[150px] h-[36px]" />
       </h1>
@@ -54,6 +54,9 @@ function WelcomeMsgFallback() {
 async function CollectionList() {
   const user = await currentUser();
   const collections = await prisma.collection.findMany({
+    include: {
+      tasks: true,
+    },
     where: {
       userId: user?.id,
     },
